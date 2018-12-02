@@ -1,6 +1,6 @@
 let cachedUnblock;
 
-const emptyFunction = function emptyFunction() {};
+function emptyFunction() {};
 
 const originalSub = MeteorX.Session.prototype.protocol_handlers.sub;
 MeteorX.Session.prototype.protocol_handlers.sub = function(msg, unblock) {

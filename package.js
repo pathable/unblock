@@ -11,12 +11,12 @@ Package.onUse(function(api, where) {
 
 Package.onTest(function(api) {
   configurePackages(api);
-  api.use("tinytest");
+  api.use(["tinytest", "random"]);
   api.add_files("test/unblock.js", "server");
 });
 
 function configurePackages(api) {
   api.versionsFrom("METEOR@1.0");
-  api.use("lamhieu:meteorx@2.0.1");
+  api.use("lamhieu:meteorx");
   api.add_files("src/unblock.js", "server");
 }
