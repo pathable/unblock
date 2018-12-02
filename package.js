@@ -11,7 +11,7 @@ Package.onUse(function(api, where) {
 
 Package.onTest(function(api) {
   configurePackages(api);
-  api.use(["tinytest", "random"]);
+  api.use(["ecmascript", "ddp", "tinytest", "random"]);
   api.add_files("test/unblock.js", "server");
 });
 
