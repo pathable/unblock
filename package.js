@@ -1,28 +1,22 @@
 Package.describe({
-  summary: "a way to use this.unblock inside publications",
-  version: "1.1.0",
-  git: "https://github.com/meteorhacks/unblock.git",
-  name: "meteorhacks:unblock"
+  summary: "A utils to unblock subscriptions, a this.unblock inside for Meteor Publications",
+  version: "1.0.0",
+  git: "https://github.com/lamhieu-vk/unblock.git",
+  name: "lamhieu:unblock",
 });
 
-Package.on_use(function (api, where) {
+Package.onUse(function(api, where) {
   configurePackages(api);
 });
 
-Package.on_test(function(api) {
+Package.onTest(function(api) {
   configurePackages(api);
-
-  api.use('tinytest');
-  api.add_files('test/unblock.js', 'server');
+  api.use("tinytest");
+  api.add_files("test/unblock.js", "server");
 });
 
-function configurePackages (api) {
-  // only on Meteor 0.9+
-  if(api.versionsFrom) {
-    api.versionsFrom('METEOR@0.9.0');
-    api.use('meteorhacks:meteorx@1.0.2');
-  } else {
-    api.use('meteorx');
-  }
-  api.add_files('lib/unblock.js', 'server');
+function configurePackages(api) {
+  api.versionsFrom("METEOR@1.0");
+  api.use("lamhieu:meteorx@2.0.1");
+  api.add_files("src/unblock.js", "server");
 }

@@ -1,8 +1,10 @@
-var cachedUnblock;
+let cachedUnblock;
 
-var originalSub = MeteorX.Session.prototype.protocol_handlers.sub;
+const emptyFunction = function emptyFunction() {};
+
+const originalSub = MeteorX.Session.prototype.protocol_handlers.sub;
 MeteorX.Session.prototype.protocol_handlers.sub = function(msg, unblock) {
-  var self = this;
+  const self = this;
   // cacheUnblock temporarly, so we can capture it later
   // we will use unblock in current eventLoop, so this is safe
   cachedUnblock = unblock;
@@ -13,21 +15,24 @@ MeteorX.Session.prototype.protocol_handlers.sub = function(msg, unblock) {
 
 // We simply replace current implementation with a simple modification
 // to add add the unblock
-MeteorX.Session.prototype._startSubscription = function (handler, subId, params, name) {
-  var self = this;
-  var sub = new MeteorX.Subscription(self, handler, subId, params, name);
+MeteorX.Session.prototype._startSubscription = function(handler, subId, params, name) {
+  const self = this;
+  const sub = new MeteorX.Subscription(self, handler, subId, params, name);
 
-  var unblockHander = cachedUnblock;
+  let unblockHander = cachedUnblock;
   // _startSubscription may call from a lot places
   // so cachedUnblock might be null in somecases
-  if(!unblockHander) {
-    unblockHander = function() {}
-  }
   // assign the cachedUnblock
-  sub.unblock = unblockHander ;
+  sub.unblock = unblockHander || emptyFunction;
 
-  if(subId) {
-    self._namedSubs[subId] = sub;
+  if (subId) {
+    const isMap = self._namedSubs instanceof Map;
+    if (isMap) {
+      // 1.7+
+      self._namedSubs.set(subId, sub);
+    } else {
+      self._namedSubs[subId] = sub;
+    }
   } else {
     self._universalSubs.push(sub);
   }
@@ -35,14 +40,14 @@ MeteorX.Session.prototype._startSubscription = function (handler, subId, params,
   sub._runHandler();
 };
 
-// sometimes _runHandler will be called directly and 
+// sometimes _runHandler will be called directly and
 // we won't have the session context and cachedUnblock
 // so, those situations, set a dummy function for unblock
 // this happens often when logging in and out
-var originalRunHandler = MeteorX.Subscription.prototype._runHandler;
+const originalRunHandler = MeteorX.Subscription.prototype._runHandler;
 MeteorX.Subscription.prototype._runHandler = function() {
-  if(!this.unblock) {
-    this.unblock = function() {};
+  if (!this.unblock) {
+    this.unblock = emptyFunction;
   }
   originalRunHandler.call(this);
-}
+};
