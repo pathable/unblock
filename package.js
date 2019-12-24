@@ -17,6 +17,6 @@ Package.onTest(function(api) {
 
 function configurePackages(api) {
   api.versionsFrom("METEOR@1.0");
-  api.use("lamhieu:meteorx@2.0.1");
+  api.use("lamhieu:meteorx@2.1.1");
   api.add_files("src/unblock.js", "server");
 }
