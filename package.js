@@ -1,8 +1,8 @@
 Package.describe({
   summary: "A utils to unblock subscriptions, a this.unblock inside for Meteor Publications",
   version: "1.1.0",
-  git: "https://github.com/lamhieu-vk/unblock.git",
-  name: "lamhieu:unblock",
+  git: "https://github.com/pathable/unblock.git",
+  name: "pathable:unblock",
 });
 
 Package.onUse(function(api, where) {
